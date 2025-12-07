@@ -1,0 +1,22 @@
+# frozen_string_literal: true
+
+class <%= class_name %> < ActiveRecord::Migration<%= migration_version %>
+  def change
+    create_table :<%= table_name %> do |t|
+<% attributes.each do |attr| %>
+<% if attr[:precision] && attr[:scale] %>
+      t.<%= attr[:type] %> :<%= attr[:name] %>, precision: <%= attr[:precision] %>, scale: <%= attr[:scale] %>
+<% elsif attr[:limit] %>
+      t.<%= attr[:type] %> :<%= attr[:name] %>, limit: <%= attr[:limit] %>
+<% else %>
+      t.<%= attr[:type] %> :<%= attr[:name] %>
+<% end %>
+<% end %>
+
+      t.timestamps
+    end
+<% attributes.select { |a| a[:index] }.each do |attr| %>
+    add_index :<%= table_name %>, :<%= attr[:name] %><%= attr[:unique] ? ', unique: true' : '' %>
+<% end %>
+  end
+end

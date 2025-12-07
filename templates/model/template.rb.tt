@@ -1,0 +1,17 @@
+# frozen_string_literal: true
+
+class <%= class_name %> < <%= parent_class %>
+<% if attributes && !attributes.empty? %>
+  # Attributes:
+<% attributes.each do |attr| %>
+  #   <%= attr[:name] %>: <%= attr[:type] %>
+<% end %>
+
+  # Validations
+<% attributes.each do |attr| %>
+<% if attr[:type] == 'string' %>
+  validates :<%= attr[:name] %>, presence: true
+<% end %>
+<% end %>
+<% end %>
+end
